@@ -1,0 +1,14 @@
+{
+  "name": "@nexcore/auth-service",
+  "version": "0.1.0",
+  "private": true,
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "dev": "tsc -w -p tsconfig.build.json"
+  },
+  "dependencies": {
+    "@nexcore/types": "*"
+  }
+}
