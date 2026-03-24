@@ -13,9 +13,11 @@ interface User {
 interface AuthState {
   user: User | null
   token: string | null
+  _hasHydrated: boolean
   setAuth: (user: User, token: string) => void
   clearAuth: () => void
   isAuthenticated: () => boolean
+  setHasHydrated: (val: boolean) => void
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -23,6 +25,7 @@ export const useAuthStore = create<AuthState>()(
     (set, get) => ({
       user: null,
       token: null,
+      _hasHydrated: false,
       setAuth: (user, token) => {
         localStorage.setItem("token", token)
         set({ user, token })
@@ -32,7 +35,13 @@ export const useAuthStore = create<AuthState>()(
         set({ user: null, token: null })
       },
       isAuthenticated: () => !!get().token,
+      setHasHydrated: (val) => set({ _hasHydrated: val }),
     }),
-    { name: "nexcore-auth" }
+    {
+      name: "nexcore-auth",
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true)
+      },
+    }
   )
 )

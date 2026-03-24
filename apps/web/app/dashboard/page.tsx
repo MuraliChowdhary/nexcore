@@ -19,15 +19,25 @@ interface Project {
 
 export default function DashboardPage() {
   const router = useRouter()
-  const { user, isAuthenticated, clearAuth } = useAuthStore()
+  const { user, isAuthenticated, clearAuth,_hasHydrated } = useAuthStore()
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
   const [showCreate, setShowCreate] = useState(false)
   const [joining, setJoining] = useState<string | null>(null)
 
-  useEffect(() => {
-    if (!isAuthenticated()) router.push("/login")
-  }, [])
+  
+useEffect(() => {
+  if (!_hasHydrated) return
+  if (!isAuthenticated()) router.push("/login")
+}, [_hasHydrated])
+
+if (!_hasHydrated) {
+  return (
+    <div className="h-screen flex items-center justify-center">
+      <p className="text-muted-foreground text-sm">Loading...</p>
+    </div>
+  )
+}
 
   const fetchProjects = async () => {
     try {

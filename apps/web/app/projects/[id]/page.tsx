@@ -19,19 +19,23 @@ interface Message {
 export default function WorkspacePage() {
   const { id: projectId } = useParams() as { id: string }
   const router = useRouter()
-  const { user } = useAuthStore()
+  const { user, _hasHydrated } = useAuthStore()
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState("")
   const [project, setProject] = useState<any>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (!user) { router.push("/login"); return }
+    if (!_hasHydrated) return
+    if (!user) {
+      router.push("/login")
+      return
+    }
 
-    // fetch project info
     api.get(`/api/projects/${projectId}`).then((res) => {
       setProject(res.data.data.project)
     })
+
 
     // connect socket
     const socket = getSocket()
@@ -73,7 +77,7 @@ export default function WorkspacePage() {
       socket.off("user_joined")
       socket.off("system_message")
     }
-  }, [projectId, user])
+  }, [projectId, user, _hasHydrated])
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -84,6 +88,15 @@ export default function WorkspacePage() {
     const socket = getSocket()
     socket.emit("send_message", { roomId: projectId, content: input })
     setInput("")
+  }
+
+
+    if (!_hasHydrated) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <p className="text-muted-foreground text-sm">Loading...</p>
+      </div>
+    )
   }
 
   return (
