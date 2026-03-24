@@ -117,7 +117,7 @@ services:
     environment:
       DATABASE_URL: postgresql://postgres:postgres@chat-db:5432/chat_db
       REDIS_URL: redis://redis:6379
-      CLIENT_URL: https://nexcore.vercel.app
+      CLIENT_URL: http://localhost:3010
       PORT: 3003
     depends_on:
       chat-db:
@@ -138,7 +138,7 @@ services:
       PROJECT_SERVICE_URL: http://project-service:3002
       CHAT_SERVICE_URL: http://chat-service:3003
       JWT_SECRET: nexcore_super_secret_change_in_prod
-      CLIENT_URL: https://nexcore.vercel.app
+      CLIENT_URL: http://localhost:3010
       PORT: 3000
     depends_on:
       - auth-service

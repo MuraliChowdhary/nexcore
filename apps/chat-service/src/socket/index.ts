@@ -5,7 +5,7 @@ import { registerChatHandlers } from "./chat.handler"
 export const initSocket = (httpServer: HTTPServer): Server => {
   const io = new Server(httpServer, {
     cors: {
-      origin: process.env.CLIENT_URL || "http://localhost:3000",
+      origin: process.env.CLIENT_URL || "http://localhost:3010",
       credentials: true,
     },
     transports: ["websocket"],
