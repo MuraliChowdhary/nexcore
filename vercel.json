@@ -2,5 +2,8 @@
   "buildCommand": "cd apps/web && next build",
   "outputDirectory": "apps/web/.next",
   "installCommand": "bun install",
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/" }
+  ]
 }
