@@ -5,11 +5,14 @@ let socket: Socket | null = null
 export const getSocket = (): Socket => {
   if (!socket) {
     const token = localStorage.getItem("token")
-    socket = io("http://localhost:3003", {
-      auth: { token },
-      transports: ["websocket"],
-      autoConnect: false,
-    })
+    socket = io(
+      process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3003",
+      {
+        auth: { token },
+        transports: ["websocket"],
+        autoConnect: false,
+      }
+    )
   }
   return socket
 }

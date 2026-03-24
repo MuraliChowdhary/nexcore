@@ -1,11 +1,10 @@
 import axios from "axios"
 
 export const api = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000",
   withCredentials: true,
 })
 
-// attach token to every request automatically
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token")
   if (token) {
@@ -14,7 +13,6 @@ api.interceptors.request.use((config) => {
   return config
 })
 
-// redirect to login on 401
 api.interceptors.response.use(
   (res) => res,
   (err) => {
