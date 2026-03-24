@@ -1,13 +1,12 @@
-FROM oven/bun:1-alpine AS base
+FROM oven/bun:1-alpine
+
 WORKDIR /app
 
 COPY package.json bun.lock ./
-COPY apps/gateway/package.json ./apps/gateway/package.json
-
 RUN bun install
-COPY apps/gateway ./apps/gateway
 
-WORKDIR /app/apps/gateway
+
+COPY src ./src
 
 EXPOSE 3000
 CMD ["sh", "-c", "bun src/index.ts"]
