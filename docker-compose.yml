@@ -71,8 +71,8 @@ services:
   # ─── Services ────────────────────────────────────────────
   auth-service:
     build:
-      context: .
-      dockerfile: apps/auth-service/Dockerfile
+      context: ./apps/auth-service   # ← points directly to service folder
+      dockerfile: Dockerfile
     container_name: nexcore_auth_service
     restart: unless-stopped
     ports:
@@ -90,8 +90,8 @@ services:
 
   project-service:
     build:
-      context: .
-      dockerfile: ./apps/project-service/Dockerfile
+      context: ./apps/project-service  # ← points directly to service folder
+      dockerfile: Dockerfile
     container_name: nexcore_project_service
     restart: unless-stopped
     ports:
@@ -108,8 +108,8 @@ services:
 
   chat-service:
     build:
-      context: .
-      dockerfile: ./apps/chat-service/Dockerfile
+      context: ./apps/chat-service     # ← points directly to service folder
+      dockerfile: Dockerfile
     container_name: nexcore_chat_service
     restart: unless-stopped
     ports:
@@ -127,8 +127,8 @@ services:
 
   gateway:
     build:
-      context: .
-      dockerfile: ./apps/gateway/Dockerfile
+      context: ./apps/gateway          # ← points directly to service folder
+      dockerfile: Dockerfile
     container_name: nexcore_gateway
     restart: unless-stopped
     ports:
