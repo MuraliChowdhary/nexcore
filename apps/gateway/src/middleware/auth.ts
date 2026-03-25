@@ -4,7 +4,8 @@ import jwt from "jsonwebtoken"
 export interface JWTPayload {
   userId: string
   email: string
-  name: string
+  name: string,
+  role?:string
 }
 
 export const verifyToken = (

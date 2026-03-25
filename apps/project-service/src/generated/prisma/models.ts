@@ -8,6 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/Project.ts'
-export type * from './models/Member.ts'
-export type * from './commonInputTypes.ts'
+export type * from './models/Project.js'
+export type * from './models/Member.js'
+export type * from './models/Invite.js'
+export type * from './commonInputTypes.js'

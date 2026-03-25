@@ -9,7 +9,28 @@
 * 🟢 You can import this file directly.
 */
 
+export const Visibility = {
+  PUBLIC: 'PUBLIC',
+  PRIVATE: 'PRIVATE'
+} as const
+
+export type Visibility = (typeof Visibility)[keyof typeof Visibility]
 
 
-// This file is empty because there are no enums in the schema.
-export {}
+export const MemberRole = {
+  OWNER: 'OWNER',
+  COLLABORATOR: 'COLLABORATOR',
+  VIEWER: 'VIEWER'
+} as const
+
+export type MemberRole = (typeof MemberRole)[keyof typeof MemberRole]
+
+
+export const InviteStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  DECLINED: 'DECLINED',
+  EXPIRED: 'EXPIRED'
+} as const
+
+export type InviteStatus = (typeof InviteStatus)[keyof typeof InviteStatus]

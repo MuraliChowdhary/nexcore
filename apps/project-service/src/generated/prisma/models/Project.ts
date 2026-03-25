@@ -9,8 +9,8 @@
  * 🟢 You can import this file directly.
  */
 import type * as runtime from "@prisma/client/runtime/client"
-import type * as $Enums from "../enums.ts"
-import type * as Prisma from "../internal/prismaNamespace.ts"
+import type * as $Enums from "../enums.js"
+import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model Project
@@ -29,6 +29,7 @@ export type ProjectMinAggregateOutputType = {
   title: string | null
   description: string | null
   ownerId: string | null
+  visibility: $Enums.Visibility | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -38,6 +39,7 @@ export type ProjectMaxAggregateOutputType = {
   title: string | null
   description: string | null
   ownerId: string | null
+  visibility: $Enums.Visibility | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -49,6 +51,7 @@ export type ProjectCountAggregateOutputType = {
   techStack: number
   rolesNeeded: number
   ownerId: number
+  visibility: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -60,6 +63,7 @@ export type ProjectMinAggregateInputType = {
   title?: true
   description?: true
   ownerId?: true
+  visibility?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -69,6 +73,7 @@ export type ProjectMaxAggregateInputType = {
   title?: true
   description?: true
   ownerId?: true
+  visibility?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -80,6 +85,7 @@ export type ProjectCountAggregateInputType = {
   techStack?: true
   rolesNeeded?: true
   ownerId?: true
+  visibility?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -164,6 +170,7 @@ export type ProjectGroupByOutputType = {
   techStack: string[]
   rolesNeeded: string[]
   ownerId: string
+  visibility: $Enums.Visibility
   createdAt: Date
   updatedAt: Date
   _count: ProjectCountAggregateOutputType | null
@@ -196,9 +203,11 @@ export type ProjectWhereInput = {
   techStack?: Prisma.StringNullableListFilter<"Project">
   rolesNeeded?: Prisma.StringNullableListFilter<"Project">
   ownerId?: Prisma.StringFilter<"Project"> | string
+  visibility?: Prisma.EnumVisibilityFilter<"Project"> | $Enums.Visibility
   createdAt?: Prisma.DateTimeFilter<"Project"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Project"> | Date | string
   members?: Prisma.MemberListRelationFilter
+  invites?: Prisma.InviteListRelationFilter
 }
 
 export type ProjectOrderByWithRelationInput = {
@@ -208,9 +217,11 @@ export type ProjectOrderByWithRelationInput = {
   techStack?: Prisma.SortOrder
   rolesNeeded?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
+  visibility?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   members?: Prisma.MemberOrderByRelationAggregateInput
+  invites?: Prisma.InviteOrderByRelationAggregateInput
 }
 
 export type ProjectWhereUniqueInput = Prisma.AtLeast<{
@@ -223,9 +234,11 @@ export type ProjectWhereUniqueInput = Prisma.AtLeast<{
   techStack?: Prisma.StringNullableListFilter<"Project">
   rolesNeeded?: Prisma.StringNullableListFilter<"Project">
   ownerId?: Prisma.StringFilter<"Project"> | string
+  visibility?: Prisma.EnumVisibilityFilter<"Project"> | $Enums.Visibility
   createdAt?: Prisma.DateTimeFilter<"Project"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Project"> | Date | string
   members?: Prisma.MemberListRelationFilter
+  invites?: Prisma.InviteListRelationFilter
 }, "id">
 
 export type ProjectOrderByWithAggregationInput = {
@@ -235,6 +248,7 @@ export type ProjectOrderByWithAggregationInput = {
   techStack?: Prisma.SortOrder
   rolesNeeded?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
+  visibility?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ProjectCountOrderByAggregateInput
@@ -252,6 +266,7 @@ export type ProjectScalarWhereWithAggregatesInput = {
   techStack?: Prisma.StringNullableListFilter<"Project">
   rolesNeeded?: Prisma.StringNullableListFilter<"Project">
   ownerId?: Prisma.StringWithAggregatesFilter<"Project"> | string
+  visibility?: Prisma.EnumVisibilityWithAggregatesFilter<"Project"> | $Enums.Visibility
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Project"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Project"> | Date | string
 }
@@ -263,9 +278,11 @@ export type ProjectCreateInput = {
   techStack?: Prisma.ProjectCreatetechStackInput | string[]
   rolesNeeded?: Prisma.ProjectCreaterolesNeededInput | string[]
   ownerId: string
+  visibility?: $Enums.Visibility
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.MemberCreateNestedManyWithoutProjectInput
+  invites?: Prisma.InviteCreateNestedManyWithoutProjectInput
 }
 
 export type ProjectUncheckedCreateInput = {
@@ -275,9 +292,11 @@ export type ProjectUncheckedCreateInput = {
   techStack?: Prisma.ProjectCreatetechStackInput | string[]
   rolesNeeded?: Prisma.ProjectCreaterolesNeededInput | string[]
   ownerId: string
+  visibility?: $Enums.Visibility
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.MemberUncheckedCreateNestedManyWithoutProjectInput
+  invites?: Prisma.InviteUncheckedCreateNestedManyWithoutProjectInput
 }
 
 export type ProjectUpdateInput = {
@@ -287,9 +306,11 @@ export type ProjectUpdateInput = {
   techStack?: Prisma.ProjectUpdatetechStackInput | string[]
   rolesNeeded?: Prisma.ProjectUpdaterolesNeededInput | string[]
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.MemberUpdateManyWithoutProjectNestedInput
+  invites?: Prisma.InviteUpdateManyWithoutProjectNestedInput
 }
 
 export type ProjectUncheckedUpdateInput = {
@@ -299,9 +320,11 @@ export type ProjectUncheckedUpdateInput = {
   techStack?: Prisma.ProjectUpdatetechStackInput | string[]
   rolesNeeded?: Prisma.ProjectUpdaterolesNeededInput | string[]
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.MemberUncheckedUpdateManyWithoutProjectNestedInput
+  invites?: Prisma.InviteUncheckedUpdateManyWithoutProjectNestedInput
 }
 
 export type ProjectCreateManyInput = {
@@ -311,6 +334,7 @@ export type ProjectCreateManyInput = {
   techStack?: Prisma.ProjectCreatetechStackInput | string[]
   rolesNeeded?: Prisma.ProjectCreaterolesNeededInput | string[]
   ownerId: string
+  visibility?: $Enums.Visibility
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -322,6 +346,7 @@ export type ProjectUpdateManyMutationInput = {
   techStack?: Prisma.ProjectUpdatetechStackInput | string[]
   rolesNeeded?: Prisma.ProjectUpdaterolesNeededInput | string[]
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -333,6 +358,7 @@ export type ProjectUncheckedUpdateManyInput = {
   techStack?: Prisma.ProjectUpdatetechStackInput | string[]
   rolesNeeded?: Prisma.ProjectUpdaterolesNeededInput | string[]
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -352,6 +378,7 @@ export type ProjectCountOrderByAggregateInput = {
   techStack?: Prisma.SortOrder
   rolesNeeded?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
+  visibility?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -361,6 +388,7 @@ export type ProjectMaxOrderByAggregateInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
+  visibility?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -370,6 +398,7 @@ export type ProjectMinOrderByAggregateInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
+  visibility?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -401,6 +430,10 @@ export type ProjectUpdaterolesNeededInput = {
   push?: string | string[]
 }
 
+export type EnumVisibilityFieldUpdateOperationsInput = {
+  set?: $Enums.Visibility
+}
+
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
@@ -419,6 +452,20 @@ export type ProjectUpdateOneRequiredWithoutMembersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ProjectUpdateToOneWithWhereWithoutMembersInput, Prisma.ProjectUpdateWithoutMembersInput>, Prisma.ProjectUncheckedUpdateWithoutMembersInput>
 }
 
+export type ProjectCreateNestedOneWithoutInvitesInput = {
+  create?: Prisma.XOR<Prisma.ProjectCreateWithoutInvitesInput, Prisma.ProjectUncheckedCreateWithoutInvitesInput>
+  connectOrCreate?: Prisma.ProjectCreateOrConnectWithoutInvitesInput
+  connect?: Prisma.ProjectWhereUniqueInput
+}
+
+export type ProjectUpdateOneRequiredWithoutInvitesNestedInput = {
+  create?: Prisma.XOR<Prisma.ProjectCreateWithoutInvitesInput, Prisma.ProjectUncheckedCreateWithoutInvitesInput>
+  connectOrCreate?: Prisma.ProjectCreateOrConnectWithoutInvitesInput
+  upsert?: Prisma.ProjectUpsertWithoutInvitesInput
+  connect?: Prisma.ProjectWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProjectUpdateToOneWithWhereWithoutInvitesInput, Prisma.ProjectUpdateWithoutInvitesInput>, Prisma.ProjectUncheckedUpdateWithoutInvitesInput>
+}
+
 export type ProjectCreateWithoutMembersInput = {
   id?: string
   title: string
@@ -426,8 +473,10 @@ export type ProjectCreateWithoutMembersInput = {
   techStack?: Prisma.ProjectCreatetechStackInput | string[]
   rolesNeeded?: Prisma.ProjectCreaterolesNeededInput | string[]
   ownerId: string
+  visibility?: $Enums.Visibility
   createdAt?: Date | string
   updatedAt?: Date | string
+  invites?: Prisma.InviteCreateNestedManyWithoutProjectInput
 }
 
 export type ProjectUncheckedCreateWithoutMembersInput = {
@@ -437,8 +486,10 @@ export type ProjectUncheckedCreateWithoutMembersInput = {
   techStack?: Prisma.ProjectCreatetechStackInput | string[]
   rolesNeeded?: Prisma.ProjectCreaterolesNeededInput | string[]
   ownerId: string
+  visibility?: $Enums.Visibility
   createdAt?: Date | string
   updatedAt?: Date | string
+  invites?: Prisma.InviteUncheckedCreateNestedManyWithoutProjectInput
 }
 
 export type ProjectCreateOrConnectWithoutMembersInput = {
@@ -464,8 +515,10 @@ export type ProjectUpdateWithoutMembersInput = {
   techStack?: Prisma.ProjectUpdatetechStackInput | string[]
   rolesNeeded?: Prisma.ProjectUpdaterolesNeededInput | string[]
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  invites?: Prisma.InviteUpdateManyWithoutProjectNestedInput
 }
 
 export type ProjectUncheckedUpdateWithoutMembersInput = {
@@ -475,8 +528,78 @@ export type ProjectUncheckedUpdateWithoutMembersInput = {
   techStack?: Prisma.ProjectUpdatetechStackInput | string[]
   rolesNeeded?: Prisma.ProjectUpdaterolesNeededInput | string[]
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  invites?: Prisma.InviteUncheckedUpdateManyWithoutProjectNestedInput
+}
+
+export type ProjectCreateWithoutInvitesInput = {
+  id?: string
+  title: string
+  description: string
+  techStack?: Prisma.ProjectCreatetechStackInput | string[]
+  rolesNeeded?: Prisma.ProjectCreaterolesNeededInput | string[]
+  ownerId: string
+  visibility?: $Enums.Visibility
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.MemberCreateNestedManyWithoutProjectInput
+}
+
+export type ProjectUncheckedCreateWithoutInvitesInput = {
+  id?: string
+  title: string
+  description: string
+  techStack?: Prisma.ProjectCreatetechStackInput | string[]
+  rolesNeeded?: Prisma.ProjectCreaterolesNeededInput | string[]
+  ownerId: string
+  visibility?: $Enums.Visibility
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  members?: Prisma.MemberUncheckedCreateNestedManyWithoutProjectInput
+}
+
+export type ProjectCreateOrConnectWithoutInvitesInput = {
+  where: Prisma.ProjectWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProjectCreateWithoutInvitesInput, Prisma.ProjectUncheckedCreateWithoutInvitesInput>
+}
+
+export type ProjectUpsertWithoutInvitesInput = {
+  update: Prisma.XOR<Prisma.ProjectUpdateWithoutInvitesInput, Prisma.ProjectUncheckedUpdateWithoutInvitesInput>
+  create: Prisma.XOR<Prisma.ProjectCreateWithoutInvitesInput, Prisma.ProjectUncheckedCreateWithoutInvitesInput>
+  where?: Prisma.ProjectWhereInput
+}
+
+export type ProjectUpdateToOneWithWhereWithoutInvitesInput = {
+  where?: Prisma.ProjectWhereInput
+  data: Prisma.XOR<Prisma.ProjectUpdateWithoutInvitesInput, Prisma.ProjectUncheckedUpdateWithoutInvitesInput>
+}
+
+export type ProjectUpdateWithoutInvitesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  techStack?: Prisma.ProjectUpdatetechStackInput | string[]
+  rolesNeeded?: Prisma.ProjectUpdaterolesNeededInput | string[]
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.MemberUpdateManyWithoutProjectNestedInput
+}
+
+export type ProjectUncheckedUpdateWithoutInvitesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  techStack?: Prisma.ProjectUpdatetechStackInput | string[]
+  rolesNeeded?: Prisma.ProjectUpdaterolesNeededInput | string[]
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  visibility?: Prisma.EnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.MemberUncheckedUpdateManyWithoutProjectNestedInput
 }
 
 
@@ -486,10 +609,12 @@ export type ProjectUncheckedUpdateWithoutMembersInput = {
 
 export type ProjectCountOutputType = {
   members: number
+  invites: number
 }
 
 export type ProjectCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   members?: boolean | ProjectCountOutputTypeCountMembersArgs
+  invites?: boolean | ProjectCountOutputTypeCountInvitesArgs
 }
 
 /**
@@ -509,6 +634,13 @@ export type ProjectCountOutputTypeCountMembersArgs<ExtArgs extends runtime.Types
   where?: Prisma.MemberWhereInput
 }
 
+/**
+ * ProjectCountOutputType without action
+ */
+export type ProjectCountOutputTypeCountInvitesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InviteWhereInput
+}
+
 
 export type ProjectSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -517,9 +649,11 @@ export type ProjectSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   techStack?: boolean
   rolesNeeded?: boolean
   ownerId?: boolean
+  visibility?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   members?: boolean | Prisma.Project$membersArgs<ExtArgs>
+  invites?: boolean | Prisma.Project$invitesArgs<ExtArgs>
   _count?: boolean | Prisma.ProjectCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["project"]>
 
@@ -530,6 +664,7 @@ export type ProjectSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   techStack?: boolean
   rolesNeeded?: boolean
   ownerId?: boolean
+  visibility?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["project"]>
@@ -541,6 +676,7 @@ export type ProjectSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   techStack?: boolean
   rolesNeeded?: boolean
   ownerId?: boolean
+  visibility?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["project"]>
@@ -552,13 +688,15 @@ export type ProjectSelectScalar = {
   techStack?: boolean
   rolesNeeded?: boolean
   ownerId?: boolean
+  visibility?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ProjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "techStack" | "rolesNeeded" | "ownerId" | "createdAt" | "updatedAt", ExtArgs["result"]["project"]>
+export type ProjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "techStack" | "rolesNeeded" | "ownerId" | "visibility" | "createdAt" | "updatedAt", ExtArgs["result"]["project"]>
 export type ProjectInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   members?: boolean | Prisma.Project$membersArgs<ExtArgs>
+  invites?: boolean | Prisma.Project$invitesArgs<ExtArgs>
   _count?: boolean | Prisma.ProjectCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ProjectIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -568,6 +706,7 @@ export type $ProjectPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   name: "Project"
   objects: {
     members: Prisma.$MemberPayload<ExtArgs>[]
+    invites: Prisma.$InvitePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -576,6 +715,7 @@ export type $ProjectPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     techStack: string[]
     rolesNeeded: string[]
     ownerId: string
+    visibility: $Enums.Visibility
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["project"]>
@@ -973,6 +1113,7 @@ readonly fields: ProjectFieldRefs;
 export interface Prisma__ProjectClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   members<T extends Prisma.Project$membersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Project$membersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  invites<T extends Prisma.Project$invitesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Project$invitesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1008,6 +1149,7 @@ export interface ProjectFieldRefs {
   readonly techStack: Prisma.FieldRef<"Project", 'String[]'>
   readonly rolesNeeded: Prisma.FieldRef<"Project", 'String[]'>
   readonly ownerId: Prisma.FieldRef<"Project", 'String'>
+  readonly visibility: Prisma.FieldRef<"Project", 'Visibility'>
   readonly createdAt: Prisma.FieldRef<"Project", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Project", 'DateTime'>
 }
@@ -1424,6 +1566,30 @@ export type Project$membersArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.MemberScalarFieldEnum | Prisma.MemberScalarFieldEnum[]
+}
+
+/**
+ * Project.invites
+ */
+export type Project$invitesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Invite
+   */
+  select?: Prisma.InviteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Invite
+   */
+  omit?: Prisma.InviteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InviteInclude<ExtArgs> | null
+  where?: Prisma.InviteWhereInput
+  orderBy?: Prisma.InviteOrderByWithRelationInput | Prisma.InviteOrderByWithRelationInput[]
+  cursor?: Prisma.InviteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InviteScalarFieldEnum | Prisma.InviteScalarFieldEnum[]
 }
 
 /**

@@ -4,6 +4,14 @@ import { api } from "@/lib/api"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 interface Props {
   open: boolean
@@ -13,7 +21,7 @@ interface Props {
 
 export default function CreateProjectModal({ open, onClose, onCreated }: Props) {
   const [form, setForm] = useState({
-    title: "", description: "", techStack: "", rolesNeeded: ""
+    title: "", description: "", techStack: "", rolesNeeded: "", visibility: ""
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
@@ -28,8 +36,9 @@ export default function CreateProjectModal({ open, onClose, onCreated }: Props) 
         description: form.description,
         techStack: form.techStack.split(",").map((s) => s.trim()).filter(Boolean),
         rolesNeeded: form.rolesNeeded.split(",").map((s) => s.trim()).filter(Boolean),
+        visibility: "PUBLIC"
       })
-      setForm({ title: "", description: "", techStack: "", rolesNeeded: "" })
+      setForm({ title: "", description: "", techStack: "", rolesNeeded: "", visibility: "" })
       onCreated()
     } catch (err: any) {
       setError(err.response?.data?.error || "Failed to create project")
@@ -37,6 +46,11 @@ export default function CreateProjectModal({ open, onClose, onCreated }: Props) 
       setLoading(false)
     }
   }
+
+  const items = [
+  { label: "Public", value: "PUBLIC" },
+  { label: "Private", value: "PRIVATE" },
+]
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -58,6 +72,21 @@ export default function CreateProjectModal({ open, onClose, onCreated }: Props) 
             onChange={(e) => setForm({ ...form, techStack: e.target.value })} required />
           <Input placeholder="Roles needed (Frontend Dev, ML Engineer)" value={form.rolesNeeded}
             onChange={(e) => setForm({ ...form, rolesNeeded: e.target.value })} />
+          <Select items={items}>
+  <SelectTrigger className="w-[180px]">
+    <SelectValue placeholder="Visibility" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectGroup>
+      {items.map((item) => (
+        <SelectItem key={item.value} value={item.value}>
+          {item.label}
+        </SelectItem>
+      ))}
+    </SelectGroup>
+  </SelectContent>
+</Select>
+           
           {error && <p className="text-destructive text-sm">{error}</p>}
           <div className="flex gap-2 pt-2">
             <Button type="button" variant="outline" className="flex-1" onClick={onClose}>

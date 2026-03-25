@@ -68,6 +68,42 @@ services:
       timeout: 5s
       retries: 5
 
+  task-db:
+    image: postgres:16-alpine
+    container_name: nexcore_task_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: task_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5435:5432"
+    volumes:
+      - task_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d task_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  notification-db:
+    image: postgres:16-alpine
+    container_name: nexcore_notification_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: notification_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5436:5432"
+    volumes:
+      - notification_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d notification_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   # ─── Services ────────────────────────────────────────────
   auth-service:
     build:
@@ -124,7 +160,41 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+  task-service:
+    build:
+      context: ./apps/task-service
+      dockerfile: Dockerfile
+    container_name: nexcore_task_service
+    restart: unless-stopped
+    ports:
+      - "3004:3004"
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@task-db:5432/task_db
+      REDIS_URL: redis://redis:6379
+      PORT: 3004
+    depends_on:
+      task-db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
+  notification-service:
+    build:
+      context: ./apps/notification-service
+      dockerfile: Dockerfile
+    container_name: nexcore_notification_service
+    restart: unless-stopped
+    ports:
+      - "3005:3005"
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@notification-db:5432/notification_db
+      REDIS_URL: redis://redis:6379
+      PORT: 3005
+    depends_on:
+      notification-db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
   gateway:
     build:
       context: ./apps/gateway          # ← points directly to service folder
@@ -137,6 +207,8 @@ services:
       AUTH_SERVICE_URL: http://auth-service:3001
       PROJECT_SERVICE_URL: http://project-service:3002
       CHAT_SERVICE_URL: http://chat-service:3003
+      TASK_SERVICE_URL: http://task-service:3004
+      NOTIFICATION_SERVICE_URL: http://notification-service:3005
       JWT_SECRET: nexcore_super_secret_change_in_prod
       CLIENT_URL: http://localhost:3010
       PORT: 3000
@@ -145,8 +217,11 @@ services:
       - project-service
       - chat-service
 
+
 volumes:
   auth_db_data:
   project_db_data:
   chat_db_data:
   redis_data:
+  task_db_data:
+  notification_db_data:

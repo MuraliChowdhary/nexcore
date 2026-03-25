@@ -4,6 +4,8 @@ import authRoutes from "./routes/auth.route"
 import projectRoutes from "./routes/projects.route"
 import messageRoutes from "./routes/messages.route"
 import { rateLimit } from "./middleware/rateLimit"
+import taskRoutes from "./routes/tasks.route"
+import notificationRoutes from "./routes/notifications.route"
 
 const app = express()
 const PORT = process.env.PORT || 3000
@@ -33,6 +35,8 @@ app.get("/health", (_, res) => {
 app.use("/api/auth", authRoutes)
 app.use("/api/projects", projectRoutes)
 app.use("/api/messages", messageRoutes)
+app.use("/api/tasks", taskRoutes)
+app.use("/api/notifications", notificationRoutes)
 
 // 404 handler
 app.use((req, res) => {
