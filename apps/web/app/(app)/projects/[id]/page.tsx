@@ -164,6 +164,9 @@ function CreateTaskModal({ open, onClose, projectId, members, onCreated }: Creat
         assigneeName: assignee?.userName || undefined,
         dueDate: dueDate ? new Date(dueDate).toISOString() : undefined,
       }
+
+      console.log(payload);
+
       const res = await api.post("/api/tasks", payload)
       const created: Task = res.data.data?.task || res.data.data
       onCreated(created)
@@ -485,6 +488,9 @@ function InviteUserModal({ open, onClose, projectId }: InviteUserModalProps) {
 function OverviewTab({ project, progress }: { project: Project; progress: Progress | null }) {
   const pct = progress?.percentage ?? 0
 
+  console.log("project value: " + JSON.stringify(project))
+  console.log("progress value: "  +JSON.stringify(progress));
+
   return (
     <div className="p-6 space-y-6 max-w-3xl">
       <div>
@@ -496,39 +502,56 @@ function OverviewTab({ project, progress }: { project: Project; progress: Progre
         </p>
       </div>
 
-      {progress && (
-        <div>
-          <h3 className="text-xs font-semibold text-zinc-400 uppercase tracking-widest mb-3">
-            Progress
-          </h3>
-          <div className="bg-white rounded-xl border border-zinc-100 p-5">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-sm font-medium text-zinc-700">
-                {progress.done} of {progress.total} tasks completed
-              </span>
-              <span className="text-sm font-semibold text-zinc-900">{pct}%</span>
-            </div>
-            <div className="h-2 bg-zinc-100 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-zinc-900 rounded-full transition-all duration-700"
-                style={{ width: `${pct}%` }}
-              />
-            </div>
-            <div className="flex gap-4 mt-4">
-              {[
-                { label: "Todo", value: progress.todo, color: "bg-zinc-200" },
-                { label: "In Progress", value: progress.inProgress, color: "bg-blue-400" },
-                { label: "Done", value: progress.done, color: "bg-green-400" },
-              ].map((s) => (
-                <div key={s.label} className="flex items-center gap-1.5 text-xs text-zinc-500">
-                  <div className={cn("w-2 h-2 rounded-full", s.color)} />
-                  {s.value} {s.label}
-                </div>
-              ))}
-            </div>
-          </div>
+     {progress?.progress && (() => {
+  const p = progress.progress
+  const pct = p.percentage ?? 0
+
+  return (
+    <div>
+      <h3 className="text-xs font-semibold text-zinc-400 uppercase tracking-widest mb-3">
+        Progress
+      </h3>
+
+      <div className="bg-white rounded-xl border border-zinc-100 p-5">
+        {/* Top Row */}
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-sm font-medium text-zinc-700">
+            {p.done} of {p.total} tasks completed
+          </span>
+          <span className="text-sm font-semibold text-zinc-900">
+            {pct}%
+          </span>
         </div>
-      )}
+
+        {/* Progress Bar */}
+        <div className="h-2 bg-zinc-100 rounded-full overflow-hidden">
+          <div
+            className="h-full bg-zinc-900 rounded-full transition-all duration-700"
+            style={{ width: `${pct}%` }}
+          />
+        </div>
+
+        {/* Stats */}
+        <div className="flex gap-4 mt-4 flex-wrap">
+          {[
+            { label: "Todo", value: p.todo, color: "bg-zinc-200" },
+            { label: "In Progress", value: p.inProgress, color: "bg-blue-400" },
+            { label: "In Review", value: p.inReview, color: "bg-yellow-400" },
+            { label: "Done", value: p.done, color: "bg-green-400" },
+          ].map((s) => (
+            <div
+              key={s.label}
+              className="flex items-center gap-1.5 text-xs text-zinc-500"
+            >
+              <div className={cn("w-2 h-2 rounded-full", s.color)} />
+              {s.value} {s.label}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+})()}
 
       {project.techStack?.length > 0 && (
         <div>
@@ -589,17 +612,32 @@ function TasksTab({
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
-  const fetchTasks = useCallback(() => {
-    api
-      .get(`/api/tasks/project/${projectId}`)
-      .then((res) => setTasks(res.data.data?.tasks || []))
-      .catch(() => {})
-      .finally(() => setLoading(false))
-  }, [projectId])
 
-  useEffect(() => {
-    fetchTasks()
-  }, [fetchTasks])
+  console.log("members : " + JSON.stringify(members));
+
+const fetchTasks = useCallback((status?: string) => {
+  setLoading(true)
+
+  api
+    .get(`/api/tasks/project/${projectId}`, {
+      params: { status }, // 👈 this adds ?status=VALUE
+    })
+    .then((res) => {
+      console.log(res.data.data?.tasks)
+      setTasks(res.data.data?.tasks || [])
+    })
+    .catch(() => {})
+    .finally(() => setLoading(false))
+}, [projectId])
+
+useEffect(() => {
+  const timeout = setTimeout(() => {
+    if (filter === "ALL") fetchTasks()
+    else fetchTasks(filter)
+  }, 200)
+
+  return () => clearTimeout(timeout)
+}, [filter, fetchTasks])
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -1143,7 +1181,7 @@ export default function WorkspacePage() {
                   <Users className="w-3 h-3" />
                   {project.members?.length || 0} members
                 </span>
-                {progress && <span>{progress.percentage}% complete</span>}
+                {progress && <span>{progress.progress.percentage}% complete</span>}
               </div>
             </div>
           </div>
@@ -1154,10 +1192,10 @@ export default function WorkspacePage() {
               <div className="w-24 h-1.5 bg-zinc-200 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-zinc-900 rounded-full transition-all duration-500"
-                  style={{ width: `${progress.percentage}%` }}
+                  style={{ width: `${progress.progress.percentage}%` }}
                 />
               </div>
-              <span className="text-xs font-semibold text-zinc-700">{progress.percentage}%</span>
+              <span className="text-xs font-semibold text-zinc-700">{progress.progress.percentage}%</span>
             </div>
           )}
         </div>

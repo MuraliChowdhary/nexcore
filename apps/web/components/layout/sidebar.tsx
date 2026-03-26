@@ -10,6 +10,7 @@ import {
   Settings,
   LogOut,
   Zap,
+  Globe,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useAuthStore } from "@/app/store/auth.store"
@@ -19,6 +20,7 @@ const navItems = [
   { label: "My Projects", href: "/projects", icon: FolderOpen },
   { label: "Discover", href: "/discover", icon: Compass },
   { label: "My Tasks", href: "/tasks", icon: CheckSquare },
+{ label: "Social", href: "/social", icon: Globe },
 ]
 
 export function Sidebar() {

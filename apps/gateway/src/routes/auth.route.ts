@@ -44,4 +44,14 @@ router.get(
   createProxyMiddleware({ target: AUTH_SERVICE, changeOrigin: true, on: { proxyReq: fixRequestBody } })
 )
 
+
+router.use(
+  "/",
+  createProxyMiddleware({
+    target: AUTH_SERVICE,
+    changeOrigin: true,
+    on: { proxyReq: fixRequestBody },
+  })
+)
+
 export default router

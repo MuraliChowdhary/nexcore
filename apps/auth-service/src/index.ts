@@ -1,5 +1,6 @@
 import express from "express"
 import authRoutes from "./routes/auth.route"
+import socialRoutes from "./routes/social.route"
 
 const app = express()
 const PORT = process.env.PORT || 3001
@@ -12,6 +13,7 @@ app.get("/health", (_, res) => {
 })
 
 // routes
+app.use("/social",socialRoutes)
 app.use("/", authRoutes)
 
 app.listen(PORT, () => {

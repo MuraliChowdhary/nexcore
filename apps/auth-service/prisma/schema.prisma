@@ -21,8 +21,59 @@ model User {
   bio       String?
   skills    String[]
   avatarUrl String?
+  visibility    UserVisibility   @default(PUBLIC)
+
+  following     Follow[]         @relation("UserFollowing")
+  followers     Follow[]         @relation("UserFollowers")
+  sentConnections     Connection[] @relation("ConnectionsSent")
+  receivedConnections Connection[] @relation("ConnectionsReceived")
+
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@map("users")
+}
+
+enum UserVisibility {
+  PUBLIC
+  PRIVATE
+}
+
+
+model Follow {
+  id          String   @id @default(uuid())
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+
+  follower    User     @relation("UserFollowers",  fields: [followerId],  references: [id], onDelete: Cascade)
+  following   User     @relation("UserFollowing",  fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
+  @@map("follows")
+}
+
+model Connection {
+  id         String           @id @default(uuid())
+  senderId   String
+  receiverId String
+  status     ConnectionStatus @default(PENDING)
+  message    String?          // optional note with invite
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+
+  sender     User @relation("ConnectionsSent",     fields: [senderId],   references: [id], onDelete: Cascade)
+  receiver   User @relation("ConnectionsReceived", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@unique([senderId, receiverId])
+  @@index([receiverId, status])
+  @@map("connections")
+}
+
+enum ConnectionStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
 }

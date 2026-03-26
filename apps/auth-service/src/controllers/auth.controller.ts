@@ -226,3 +226,41 @@ export const changePassword = async (req: Request, res: Response) => {
     return res.status(500).json({ success: false, message: "Internal server error." })
   }
 }
+
+
+export const deleteAccount = async (req: Request, res: Response) => {
+  try {
+    const userId = req.headers["x-user-id"] as string
+    if (!userId) {
+      return res.status(401).json({ success: false, message: "Unauthorized" })
+    }
+
+    await prisma.user.delete({ where: { id: userId } })
+    return res.status(200).json({ success: true, message: "Account deleted." })
+  } catch (err) {
+    console.error("[deleteAccount]", err)
+    return res.status(500).json({ success: false, message: "Internal server error." })
+  }
+}
+
+
+export const  allusers = async (req: Request, res: Response) => {
+  try {
+    const users = await prisma.user.findMany({
+      // where: { visibility: "PUBLIC" },
+      select: {
+        id: true,
+        name: true,
+        bio: true,
+        skills: true,
+        avatarUrl: true,
+        createdAt: true,
+      },
+    })
+
+    return res.status(200).json({ success: true, data: { users } })
+  } catch (error) {
+    console.error("[allusers]", error)
+    return res.status(500).json({ success: false, error: "Internal server error" })
+  }
+}

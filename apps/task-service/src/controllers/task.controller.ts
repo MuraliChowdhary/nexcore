@@ -53,7 +53,7 @@ export const getProjectTasks = async (req: Request, res: Response) => {
     }
     const status = req.query.status as TaskStatus | undefined
 
-    if(!status || (status !== "TODO" && status !== "IN_PROGRESS" && status !== "DONE")) {
+    if(!status || (status !== "TODO" && status !== "IN_PROGRESS" && status !== "DONE"  && status !== "IN_REVIEW")) {
       return res.status(400).json({ success: false, error: "Invalid status filter" })
     }
 
