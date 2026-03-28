@@ -69,11 +69,14 @@ interface Message {
 }
 
 interface Progress {
-  total: number
+  progress : {
+    total: number
   done: number
   inProgress: number
   todo: number
   percentage: number
+  inReview: number
+  }
 }
 
 type Tab = "overview" | "tasks" | "chat" | "members"
@@ -486,11 +489,8 @@ function InviteUserModal({ open, onClose, projectId }: InviteUserModalProps) {
 // ─── Tab: Overview ────────────────────────────────────────────────────────────
 
 function OverviewTab({ project, progress }: { project: Project; progress: Progress | null }) {
-  const pct = progress?.percentage ?? 0
 
-  console.log("project value: " + JSON.stringify(project))
-  console.log("progress value: "  +JSON.stringify(progress));
-
+  console.log("progress : ",progress?.progress);
   return (
     <div className="p-6 space-y-6 max-w-3xl">
       <div>
@@ -612,8 +612,6 @@ function TasksTab({
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
-
-  console.log("members : " + JSON.stringify(members));
 
 const fetchTasks = useCallback((status?: string) => {
   setLoading(true)
@@ -1105,14 +1103,14 @@ export default function WorkspacePage() {
 ]).then(([projRes, progRes]) => {
 
   if (projRes.status === "fulfilled") {
-    console.log("project:", projRes.value.data.data?.project);
+    // console.log("project:", projRes.value.data.data?.project);
     setProject(projRes.value.data.data?.project || null);
   } else {
     console.error("Project API failed:", projRes.reason);
   }
 
   if (progRes.status === "fulfilled") {
-    console.log("progress:", progRes.value.data.data);
+    // console.log("progress:", progRes.value.data.data);
     setProgress(progRes.value.data.data || null);
   } else {
     console.error("Progress API failed:", progRes.reason);
