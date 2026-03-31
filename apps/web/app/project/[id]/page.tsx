@@ -36,6 +36,8 @@ export default function WorkspacePage() {
       setProject(res.data.data.project)
     })
 
+    
+
 
     // connect socket
     const socket = getSocket()
@@ -45,6 +47,15 @@ export default function WorkspacePage() {
     socket.on("message_history", (history: Message[]) => {
       setMessages(history)
     })
+
+
+    if (typeof window !== "undefined") {
+  ;(window as any).socket = socket
+}
+
+    socket.on("pong_test", () => {
+  console.log("pong received")
+})
 
     socket.on("new_message", (msg: Message) => {
       setMessages((prev) => [...prev, msg])

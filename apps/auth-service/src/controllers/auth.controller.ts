@@ -25,11 +25,13 @@ export const register = async (req: Request, res: Response) => {
       })
     }
 
-    const hashedPassword = await bcrypt.hash(password, 12)
+    const hashedPassword = (await Bun.hash(password, 8)).toString()
 
     const user = await prisma.user.create({
-      data: { name, email, password: hashedPassword, 
-        bio : bio ?? null, skills },
+      data: {
+        name, email, password: hashedPassword,
+        bio: bio ?? null, skills
+      },
       select: {
         id: true,
         name: true,
@@ -73,7 +75,7 @@ export const login = async (req: Request, res: Response) => {
       })
     }
 
-    const isValid = await bcrypt.compare(password, user.password)
+    const isValid = await Bun.password.verify(password, user.password)
     if (!isValid) {
       return res.status(401).json({
         success: false,
@@ -244,7 +246,7 @@ export const deleteAccount = async (req: Request, res: Response) => {
 }
 
 
-export const  allusers = async (req: Request, res: Response) => {
+export const allusers = async (req: Request, res: Response) => {
   try {
     const users = await prisma.user.findMany({
       // where: { visibility: "PUBLIC" },

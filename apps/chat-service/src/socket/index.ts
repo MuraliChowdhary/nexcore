@@ -37,6 +37,9 @@ export const initSocket = (httpServer: HTTPServer): Server => {
   })
 
   io.on("connection", (socket) => {
+      socket.on("ping_test", () => {
+    socket.emit("pong_test")
+  })
     registerChatHandlers(io, socket)
   })
 
