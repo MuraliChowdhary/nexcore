@@ -14,7 +14,8 @@
     "@types/jsonwebtoken": "^9.0.10",
     "prettier": "^3.7.4",
     "turbo": "^2.8.20",
-    "typescript": "^6.0.2"
+    "typescript": "^6.0.2",
+    "@types/bun": "latest"
   },
   "engines": {
     "node": ">=18"
