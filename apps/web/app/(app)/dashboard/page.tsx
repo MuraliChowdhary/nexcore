@@ -335,7 +335,7 @@ export default function DashboardPage() {
 
   
 
-    const fetchProjects = async () => {
+     const fetchProjects = async () => {
       try {
         const res = await api.get("/api/projects")
         setProjects(res.data.data.projects)
@@ -359,6 +359,7 @@ export default function DashboardPage() {
           </p>
         </div>
         {/* <Link href="/projects/new"> */}
+
            <Button variant="outline" size="sm" onClick={() => setShowCreate(true)}>
             New project
           </Button>
@@ -614,14 +615,16 @@ export default function DashboardPage() {
                 <ProjectCard key={project.id} project={project} isOwner={true} />
               ))}
               {/* Create new card */}
-              <Link href="/projects/new">
+               
                 <div className="border-2 border-dashed border-zinc-100 rounded-xl p-5 flex flex-col items-center justify-center gap-2 text-center hover:border-zinc-200 hover:bg-zinc-50 transition-all cursor-pointer h-full min-h-[120px]">
                   <div className="w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center">
                     <Plus className="w-4 h-4 text-zinc-400" />
                   </div>
-                  <p className="text-xs font-medium text-zinc-400">New project</p>
+                  <p className="text-xs font-medium text-zinc-400" onClick={() => setShowCreate(true)}>
+                    New project
+                  </p>
                 </div>
-              </Link>
+               
             </div>
           )
         ) : joinedProjects.length === 0 ? (

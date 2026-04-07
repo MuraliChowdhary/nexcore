@@ -11,6 +11,7 @@ import {
   LogOut,
   Zap,
   Globe,
+  Users,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useAuthStore } from "@/app/store/auth.store"
@@ -21,6 +22,7 @@ const navItems = [
   { label: "Discover", href: "/discover", icon: Compass },
   { label: "My Tasks", href: "/tasks", icon: CheckSquare },
 { label: "Social", href: "/social", icon: Globe },
+{ label: "People", href: "/people", icon: Users }
 ]
 
 export function Sidebar() {

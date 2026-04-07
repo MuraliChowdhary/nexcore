@@ -6,7 +6,7 @@ import messageRoutes from "./routes/messages.route"
 import { rateLimit } from "./middleware/rateLimit"
 import taskRoutes from "./routes/tasks.route"
 import notificationRoutes from "./routes/notifications.route"
-
+import matchingRoutes from "./routes/matching.route"
 const app = express()
 const PORT = process.env.PORT || 3000
 
@@ -37,6 +37,7 @@ app.use("/api/projects", projectRoutes)
 app.use("/api/messages", messageRoutes)
 app.use("/api/tasks", taskRoutes)
 app.use("/api/notifications", notificationRoutes)
+app.use("/api/matching", matchingRoutes)
 
 // 404 handler
 app.use((req, res) => {

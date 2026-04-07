@@ -34,7 +34,7 @@ import {
   Mail,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
-
+import { MembersTabs } from "@/components/members-tab"
 // ─── Types ───────────────────────────────────────────────────────────────────
 
 interface Project {
@@ -1184,6 +1184,8 @@ export default function WorkspacePage() {
             </div>
           </div>
 
+          
+
           {/* Progress pill */}
           {progress && (
             <div className="hidden sm:flex items-center gap-2 bg-zinc-50 border border-zinc-100 rounded-lg px-3 py-1.5 shrink-0">
@@ -1249,7 +1251,7 @@ export default function WorkspacePage() {
         )}
         {activeTab === "members" && (
           <div className="h-full overflow-y-auto">
-            <MembersTab project={project} isOwner={isOwner} />
+            <MembersTabs project={project} isOwner={isOwner} />
           </div>
         )}
       </div>

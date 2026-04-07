@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs"
 import { prisma } from "../lib/index"
 import { signToken } from "../lib/jwt"
 import { registerSchema, loginSchema } from "../validators/auth.validator"
+import { publisher } from "../lib/redis"
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -42,6 +43,14 @@ export const register = async (req: Request, res: Response) => {
         createdAt: true,
       },
     })
+
+    await publisher.publish(
+  "user:registered",
+  JSON.stringify({
+    userId: user.id,
+    userName: user.name,
+    skills: user.skills,
+  }))
 
     const token = signToken({ userId: user.id, email: user.email, name: user.name })
 
@@ -248,8 +257,11 @@ export const deleteAccount = async (req: Request, res: Response) => {
 
 export const allusers = async (req: Request, res: Response) => {
   try {
+    // The gateway injects x-user-id from the verified JWT
+    const requestingUserId = req.headers["x-user-id"] as string | undefined
+
     const users = await prisma.user.findMany({
-      // where: { visibility: "PUBLIC" },
+      where: { visibility: "PUBLIC" },
       select: {
         id: true,
         name: true,
@@ -257,10 +269,57 @@ export const allusers = async (req: Request, res: Response) => {
         skills: true,
         avatarUrl: true,
         createdAt: true,
+        // pull only connections involving the requesting user
+        sentConnections: requestingUserId
+          ? {
+              where: { receiverId: requestingUserId },
+              select: { status: true },
+            }
+          : false,
+        receivedConnections: requestingUserId
+          ? {
+              where: { senderId: requestingUserId },
+              select: { status: true },
+            }
+          : false,
       },
     })
 
-    return res.status(200).json({ success: true, data: { users } })
+    // Flatten connection status into each user object
+    const enriched = users
+      .filter((u) => u.id !== requestingUserId) // exclude self
+      .map((u) => {
+        // sentConnections: u sent to requesting user (u is sender, requester is receiver)
+        // receivedConnections: requesting user sent to u (requester is sender, u is receiver)
+        const sent = (u.sentConnections as { status: string }[] | undefined)?.[0]
+        const received = (u.receivedConnections as { status: string }[] | undefined)?.[0]
+
+        let connectionStatus: "NONE" | "PENDING_SENT" | "PENDING_RECEIVED" | "ACCEPTED" | "DECLINED" = "NONE"
+
+        if (received?.status === "ACCEPTED" || sent?.status === "ACCEPTED") {
+          connectionStatus = "ACCEPTED"
+        } else if (received?.status === "PENDING") {
+          // requesting user sent a request to u, still pending
+          connectionStatus = "PENDING_SENT"
+        } else if (sent?.status === "PENDING") {
+          // u sent a request to requesting user, waiting on requester
+          connectionStatus = "PENDING_RECEIVED"
+        } else if (received?.status === "DECLINED" || sent?.status === "DECLINED") {
+          connectionStatus = "DECLINED"
+        }
+
+        return {
+          id: u.id,
+          name: u.name,
+          bio: u.bio,
+          skills: u.skills,
+          avatarUrl: u.avatarUrl,
+          createdAt: u.createdAt,
+          connectionStatus,
+        }
+      })
+
+    return res.status(200).json({ success: true, data: { users: enriched } })
   } catch (error) {
     console.error("[allusers]", error)
     return res.status(500).json({ success: false, error: "Internal server error" })

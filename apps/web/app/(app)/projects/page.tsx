@@ -21,7 +21,8 @@ import {
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { formatDistanceToNow } from "date-fns"
-
+import CreateProjectModal from "@/components/projects/CreateProjectModal"
+ 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 interface Member {
@@ -62,6 +63,7 @@ function GridSkeleton() {
     </div>
   )
 }
+
 
 function ListSkeleton() {
   return (
@@ -260,7 +262,7 @@ export default function ProjectsPage() {
   const [search, setSearch] = useState("")
   const [visibilityFilter, setVisibilityFilter] = useState<VisibilityFilter>("ALL")
   const [viewMode, setViewMode] = useState<ViewMode>("grid")
-
+ const [showCreate, setShowCreate] = useState(false)
   useEffect(() => {
     if (!_hasHydrated) return
     if (!user) {
@@ -299,6 +301,18 @@ export default function ProjectsPage() {
 
   const isFiltered = !!search || visibilityFilter !== "ALL"
 
+
+    const fetchProjects = async () => {
+      try {
+        const res = await api.get("/api/projects")
+        setProjects(res.data.data.projects)
+      } catch (err) {
+        console.error(err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
   return (
     <div className="p-6 max-w-[1100px] mx-auto space-y-6">
       {/* ── Header ── */}
@@ -312,16 +326,21 @@ export default function ProjectsPage() {
             Projects you own — both public and private.
           </p>
         </div>
-        <Link href="/projects/new">
-          <Button
-            size="sm"
-            className="gap-1.5 h-8 text-xs bg-zinc-900 hover:bg-zinc-800"
-          >
-            <Plus className="w-3.5 h-3.5" />
-            New Project
+       
+          <Button variant="outline" size="sm" onClick={() => setShowCreate(true)}>
+            New project
           </Button>
-        </Link>
+       
       </div>
+
+
+      
+           <CreateProjectModal
+                      open={showCreate}
+                      onClose={() => setShowCreate(false)}
+                      onCreated={() => { setShowCreate(false); fetchProjects() }}
+            />
+      
 
       {/* ── Stat pills ── */}
       {!loading && projects.length > 0 && (
@@ -435,14 +454,14 @@ export default function ProjectsPage() {
             <ProjectGridCard key={p.id} project={p} />
           ))}
           {/* New project card */}
-          <Link href="/projects/new">
+           
             <div className="border-2 border-dashed border-zinc-100 rounded-xl p-5 flex flex-col items-center justify-center gap-2 hover:border-zinc-300 hover:bg-zinc-50 transition-all cursor-pointer min-h-[120px]">
               <div className="w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center">
                 <Plus className="w-4 h-4 text-zinc-400" />
               </div>
-              <p className="text-xs font-medium text-zinc-400">New project</p>
+              <p className="text-xs font-medium text-zinc-400" onClick={() => setShowCreate(true)}>New project</p>
             </div>
-          </Link>
+      
         </div>
       ) : (
         <div className="space-y-2">
@@ -452,5 +471,6 @@ export default function ProjectsPage() {
         </div>
       )}
     </div>
+
   )
 }
