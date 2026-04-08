@@ -35,6 +35,7 @@ interface Person {
   skills: string[]
   avatarUrl?: string
   createdAt: string
+  connectionId?:string
   connectionStatus: ConnectionStatus
 }
 
@@ -63,16 +64,22 @@ function ConnectButton({
   }
 
   // ✅ FIX 2: Removed hardcoded localhost URL — now uses relative path via api instance
-  const handleAccept = async () => {
-    setLoading(true)
-    try {
-      await api.patch(`http://localhost:3000/api/auth/social/connections/${match.id}/respond`, { action: "ACCEPT" })
-      onStatusChange(person.id, "ACCEPTED")
-    } catch {
-    } finally {
-      setLoading(false)
-    }
+const handleAccept = async () => {
+  if (!person.connectionId) return
+
+  setLoading(true)
+  try {
+    await api.patch(`/api/auth/social/connections/${person.connectionId}/respond`, {
+      action: "ACCEPT",
+    })
+
+    onStatusChange(person.id, "ACCEPTED")
+  } catch (err) {
+    console.error("Accept failed", err)
+  } finally {
+    setLoading(false)
   }
+}
 
   if (person.connectionStatus === "ACCEPTED") {
     return (
